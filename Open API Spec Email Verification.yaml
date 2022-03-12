@@ -1,0 +1,87 @@
+# Please copy and paste the code below into the swagger ui at https://editor.swagger.io/ 
+
+openapi: "3.0.0"
+
+info:
+  version: "1.0"
+  title: "EVA Email Verifcation API"
+  description: "This API allows users to verify whether or not an email address is vaild."
+  contact:
+    name: Contact
+    url: https://docs.google.com/forms/d/e/1FAIpQLSfa76A9ES0wvIF0_I7ebLAFugVhhDKB7em-WPbMjHPj1w7mOw/viewform 
+
+servers:
+  - url: https://api.eva.pingutil.com
+    description: Production server
+
+paths:
+  /email:
+    get:
+      tags:
+      - Email Verification
+      summary: "Determines the validity of an email address."
+      description: "For any email address input, a response will be delivered that details whether or not it is in use."
+      operationId: getemail
+      parameters:
+          
+        - name: email
+          in: query
+          description: "The email address you wish to verify."
+          required: true
+          schema: 
+            type: string
+          example: johndoe@gmail.com
+
+      responses:
+        200:
+          description: Information on the email input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailResponse'
+                
+        404: 
+          description: Response not found. The request may be missing an email id as query parameter. 
+          content:
+            text/plain:
+              schema:
+                title: message 
+                type: string
+
+            
+components:
+  schemas:
+    EmailResponse:
+      title: data
+      type: object
+      properties:
+        email_address: 
+          type: string
+          description: Email address input
+        domain:
+          type: string
+          description: Domain of email address
+        valid_syntax:
+          type: boolean
+          description: Validity of syntax
+        disposable:
+          type: boolean
+          description: Whether or not the email address is disposable
+        webmail:
+          type: boolean
+          description: If this email associated with a webmail service
+        deliverable:
+          type: boolean
+          description: If the email address is deliverable
+        catch_all:
+          type: boolean
+          description: The email address is/is not a catchall for all emails
+        gibberish: 
+          type: boolean 
+          description: In gibberish or not.
+        spam: 
+          type: boolean
+          description: Is this email considered spam or not
+            
+
+  
