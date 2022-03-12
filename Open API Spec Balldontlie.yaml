@@ -1,0 +1,144 @@
+openapi: "3.0.0"
+
+info:
+  version: "1.0"
+  title: "Balldontlie API"
+  description: "This API allows users to access information about NBA basketball players."
+  contact:
+    name: Contact
+    url: hello@balldontlie.io
+
+servers:
+  - url: https://www.balldontlie.io/api/v1
+    description: Production server
+
+paths:
+  /players:
+    get:
+      tags:
+      - Basketball Players
+      summary: "Gets information on basketball players."
+      description: "Retrieves information on basketball players that have played in the NBA."
+      operationId: getplayers
+      parameters:
+          
+        - name: page 
+          in: query
+          description: "The page number of total results you wish to access (defaults to 0)."
+          required: false
+          schema: 
+            type: number
+          example: 10
+    
+        - name: per_page
+          in: query
+          description: "The number of results that populate each page (defualts to 25), to a maximum of 100 per page."
+          required: false
+          schema:
+            type: number
+          example: 50
+          
+        - name: search
+          in: query
+          description: "Allows the search of players that have this as part of their name (either first or last)."
+          required: false
+          schema:
+            type: string
+          example: davis
+        
+
+      responses:
+        200:
+          description: The full list of players based on search inputs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayersResponse'
+                
+        404: 
+          description: Not found response
+          content:
+            text/plain:
+              schema:
+                title: Songs not found 
+                type: string
+                example: Not found
+        
+            
+components:
+  schemas:
+    PlayersResponse:
+      title: players
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+          properties:
+            id:
+              type: string
+              description: ID of player
+            first_name:
+              type: string
+              description: First name of player
+            last_name:
+              type: string
+              description: Last name of player
+            position:
+              type: string
+              description: Position player occupies
+            height_feet:
+              type: string
+              description: Player height in feet
+            height_inches:
+              type: string
+              description: Player height in inches
+            weight_pounds:
+              type: string
+              description: Player weight in pounds
+            team: 
+              type: object
+              properties: 
+                id: 
+                  type: string
+                  description: id of team (ordered alphabetically)
+                abbreviation:
+                  type: string
+                  description: Short form of team name
+                city:
+                  type: string
+                  description: City name
+                conference:
+                  type: string
+                  description: Team conference
+                division:
+                  type: string
+                  description: Team division
+                full_name:
+                  type: string
+                  description: Full team name
+                name:
+                  type: string
+                  description: Franchise name
+                
+        meta:
+          type: object
+          properties: 
+            total_pages: 
+              type: string
+              description: Total pages returned in search
+            current_page: 
+              type: number
+            next_page: 
+              type: number
+              description: The next page returned
+            per_page: 
+              type: number
+              description: Results per page
+            total_count:
+              type: number
+              description: Total results returned        
+                    
+
+  
