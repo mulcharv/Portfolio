@@ -31,7 +31,7 @@ paths:
           required: false
           schema: 
             type: number
-          example: 10
+          example: 1
     
         - name: per_page
           in: query
